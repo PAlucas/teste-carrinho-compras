@@ -8,5 +8,5 @@ import br.com.geofusion.testecarrinhocompras.Model.ProductModel;
 //Interface for decouple purpose
 @Repository
 public interface ProductRepository extends JpaRepository<ProductModel, Long>{
-    boolean existsById(Long id);
+    boolean existsByCode(Long id);
 }
