@@ -9,23 +9,23 @@ import javax.persistence.*;
 public class ClientModel implements Serializable{
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ClientSeq")
-    private long code;
+    private long clientId;
     @Column(nullable = false, length = 255)
-    private String description;
+    private String nome;
 
-    public long getCode() {
-        return this.code;
+    public long getClientId() {
+        return this.clientId;
     }
 
-    public void setCode(long code) {
-        this.code = code;
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
     }
 
-    public String getDescription() {
-        return this.description;
+    public String getNome() {
+        return this.nome;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
