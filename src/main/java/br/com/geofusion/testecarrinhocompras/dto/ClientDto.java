@@ -7,14 +7,13 @@ public class ClientDto {
     @NotBlank
     @Size(max = 280)
     private String nome;
-    @NotBlank
-    @Size(max = 280)
-    private String cartaoCredito;
-    private String status;
-    @NotBlank
-    @Size(max = 280)
-    private String limiteCartao;
-    @NotBlank
-    @Size(max = 280)
-    private String data;
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
 }
