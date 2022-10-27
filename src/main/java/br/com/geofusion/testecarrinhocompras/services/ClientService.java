@@ -5,9 +5,11 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.stereotype.Service;
+
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Repository.ClientRepository;
-
+@Service
 public class ClientService {
         final ClientRepository clientRepository;
 
