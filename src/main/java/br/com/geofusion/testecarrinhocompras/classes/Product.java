@@ -18,7 +18,8 @@ public class Product {
      * @param description
      */
     public Product(Long code, String description) {
-
+        this.code = code;
+        this.description = description;
     }
 
     /**
