@@ -16,7 +16,7 @@ public class ItemModel implements Serializable{
     @Column(nullable = false, length = 255)
     private long codeProduto;
     @Column(nullable = false, length = 255)
-    private String quantity;
+    private int quantity;
     @Column(nullable = false, length = 255)
     private double unitPrice;
     @ManyToOne
@@ -39,11 +39,11 @@ public class ItemModel implements Serializable{
         this.codeProduto = codeProduto;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return this.quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
