@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.geofusion.testecarrinhocompras.Model.ProductModel;
 import br.com.geofusion.testecarrinhocompras.Repository.ProductRepository;
 @SpringBootTest
-public class ProducModelTest {
+public class ProductModelTest {
     @Autowired
     ProductRepository productRepository;
     /**

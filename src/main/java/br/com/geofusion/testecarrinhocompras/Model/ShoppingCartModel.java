@@ -13,7 +13,17 @@ public class ShoppingCartModel implements Serializable{
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ShoppingCardSeq")
     private long shopId;
+    @ManyToOne
+    @JoinColumn(name ="clientId", unique = true, nullable = false)
+    private ClientModel idClient;
 
+    public ClientModel getIdClient() {
+        return this.idClient;
+    }
+
+    public void setIdClient(ClientModel idClient) {
+        this.idClient = idClient;
+    }
 
     public long getShopId() {
         return this.shopId;

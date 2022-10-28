@@ -13,14 +13,15 @@ public class ItemModel implements Serializable{
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ItemSeq")
     private long id;
-    @Column(nullable = false, length = 255)
-    private long codeProduto;
+    @ManyToOne
+    @JoinColumn(name ="code", nullable = false)
+    private ProductModel codeProduto;
     @Column(nullable = false, length = 255)
     private int quantity;
     @Column(nullable = false, length = 255)
     private double unitPrice;
     @ManyToOne
-    @JoinColumn(name ="shopId")
+    @JoinColumn(name ="shopId", nullable = false)
     private ShoppingCartModel idShop;
 
     public long getId() {
@@ -31,11 +32,11 @@ public class ItemModel implements Serializable{
         this.id = id;
     }
 
-    public long getCodeProduto() {
+    public ProductModel getCodeProduto() {
         return this.codeProduto;
     }
 
-    public void setCodeProduto(long codeProduto) {
+    public void setCodeProduto(ProductModel codeProduto) {
         this.codeProduto = codeProduto;
     }
 
