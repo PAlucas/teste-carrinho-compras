@@ -10,13 +10,16 @@ import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 public class ShoppingCardModelTest {
     @Autowired
     ShoppingCartRepository shoppingCartRepository;
-
+    /**
+     * Teste para ver se está sendo inserido o carrinho no banco de dados
+     */
     @Test
     public void testCliente(){
-        long testId = 10; 
+        long testId = 1L; 
         ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        ShoppingCartModel shoppingCartModelAux = new ShoppingCartModel();
         shoppingCartModel.setShopId(testId);
-        shoppingCartRepository.save(shoppingCartModel);
-        assertNotNull(shoppingCartRepository.findById(testId).get());
+        shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
+        assertNotNull(shoppingCartRepository.findById(shoppingCartModelAux.getShopId()).get());
     }
 }

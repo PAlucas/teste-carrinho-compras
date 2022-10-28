@@ -10,14 +10,17 @@ import br.com.geofusion.testecarrinhocompras.Repository.ProductRepository;
 public class ProducModelTest {
     @Autowired
     ProductRepository productRepository;
-
+    /**
+     * Teste para ver se está sendo inserido o item no banco de dados
+     */
     @Test
     public void testCliente(){
-        long testId = 10; 
+        long testId = 1L; 
         ProductModel productModel = new ProductModel();
+        ProductModel productModelAux = new ProductModel();
         productModel.setCode(testId);
         productModel.setDescription("Lucas");
-        productRepository.save(productModel);
-        assertNotNull(productRepository.findById(testId).get());
+        productModelAux = productRepository.save(productModel);
+        assertNotNull(productRepository.findById(productModelAux.getCode()).get());
     }
 }
