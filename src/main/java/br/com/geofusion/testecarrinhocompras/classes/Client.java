@@ -3,8 +3,6 @@ package br.com.geofusion.testecarrinhocompras.classes;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.boot.jackson.JsonObjectSerializer;
-
 public class Client {
     private String nome;
 

@@ -54,8 +54,7 @@ public class ClientFactoryTest {
     public void retornaPostStatusCorreto() throws Exception{
         ClientDto clientDto = new ClientDto();
         ClientModel clientRequest = new ClientModel();
-        clientDto.setNome("Lucas");
-        Client client = new Client(clientRequest.getNome());
+        clientDto.setNome("Ana");
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
