@@ -1,5 +1,10 @@
 package br.com.geofusion.testecarrinhocompras.classes;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.boot.jackson.JsonObjectSerializer;
+
 public class Client {
     private String nome;
 
@@ -26,5 +31,15 @@ public class Client {
      */
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    /**
+     * Método para criar um json retorna nome do cliente
+     * @param nome
+     */
+    public Map<String, String> json() {
+        HashMap<String, String> json = new HashMap<>();
+        json.put("Nome", this.nome);
+        return json;
     }
 }
