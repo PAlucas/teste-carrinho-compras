@@ -3,6 +3,7 @@ package br.com.geofusion.testecarrinhocompras.controllers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,7 @@ public class ClientControllerFactory {
     
     @Autowired
     ClientService clientService;
+
     /**
      * Método post para adicionar um cliente no banco de dados e esse cliente no banco de dados
      * ele recebe um json com o parâmetro Nome recebendo o nome escolhido.
@@ -47,6 +51,7 @@ public class ClientControllerFactory {
         Client client = new Client(clientModel.getNome());
         return ResponseEntity.status(HttpStatus.CREATED).body(client.json());
     }
+
     /**
      * Método get que mostra todos os clientes que foram cadastrados no banco de dados
      * @return ResponseEntity<List<Client>>
@@ -61,5 +66,22 @@ public class ClientControllerFactory {
 
         return ResponseEntity.status(HttpStatus.OK).body(listaDeClientes);
     }
+
+    /**
+     * Método patch que mostra troca o nome do cliente com base no id passado na url
+     * @return ResponseEntity<Object>
+     */
+    @PatchMapping("/{client_id}")
+    public @ResponseBody ResponseEntity<Object> trocarNomeCliente (@PathVariable(value = "client_id") long id,@RequestBody @Valid ClientDto clienteDto) throws ParseException{
+        Optional<ClientModel> clientModelOptional = clientService.findById(id);
+        if(!clientModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado");
+        }
+        BeanUtils.copyProperties(clienteDto, clientModelOptional.get());
+        clientService.save(clientModelOptional.get());
+        Client client = new Client(clientModelOptional.get().getNome());
+        return ResponseEntity.status(HttpStatus.CREATED).body(client.nomeNovoJson());
+    }
+
 
 }

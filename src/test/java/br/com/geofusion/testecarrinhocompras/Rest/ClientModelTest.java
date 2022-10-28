@@ -17,12 +17,13 @@ public class ClientModelTest {
 
     @Test
     public void testCliente(){
-        long testId = 10; 
+        long testId = 1L; 
         ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
         clientModel.setClientId(testId);
         clientModel.setNome("Lucas");
-        clientRepository.save(clientModel);
-        assertNotNull(clientRepository.findById(testId).get());
+        clientModelAux = clientRepository.save(clientModel);
+        assertNotNull(clientRepository.findById(clientModelAux.getClientId()).get());
     }
 
 }

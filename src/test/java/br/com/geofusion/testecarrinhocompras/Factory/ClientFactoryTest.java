@@ -42,6 +42,9 @@ public class ClientFactoryTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ClientService clientService;
     
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     
@@ -64,7 +67,7 @@ public class ClientFactoryTest {
     }
 
     /**
-     * Teste para ver que quando feito um posto no endpoint /Cliente com 
+     * Teste para ver que quando feito um post no endpoint /Cliente com 
      * as informações corretas o status vai ser correto e vai retornar 
      * as informações corretas 
      * @throws Exception
@@ -91,5 +94,37 @@ public class ClientFactoryTest {
     public void retornaGetClient() throws Exception{
         this.mockMvc.perform(get("/Cliente"))
         .andExpect(status().isOk());
+    }
+
+        /**
+     * Teste para ver que quando feito um patch no endpoint /Cliente com 
+     * as informações corretas o status vai ser correto e vai retornar 
+     * as informações corretas 
+     * @throws Exception
+     */
+    @Test
+    public void retornaPatchClient() throws Exception{
+
+        long testId = 1L; 
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas Teste");
+        clientModelAux = clientService.save(clientModel);
+        
+        ClientDto clientDto = new ClientDto();
+        clientDto.setNome("Lucas Novo");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(clientDto);
+
+        char aspas = '"';
+        String stringFinal = "{"+aspas+"Novo nome"+aspas+":"+aspas+"Lucas Novo"+aspas+"}";
+
+        this.mockMvc.perform(patch("/Cliente/"+clientModelAux.getClientId()).contentType(APPLICATION_JSON_UTF8).content(requestJson))
+        .andExpect(status().isCreated()).andExpect(content().string(stringFinal));
     }
 }

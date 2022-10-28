@@ -24,25 +24,28 @@ public class ItemModelTest {
 
     @Test
     public void testItemModel(){
-        long testId = 10; 
+        long testId = 1L; 
 
         ShoppingCartModel shop = new ShoppingCartModel();
+        ShoppingCartModel shopAux = new ShoppingCartModel();
         shop.setShopId(testId);
-
+        shopAux = shoppingCartTest.save(shop);
+        
         ItemModel itemModel = new ItemModel();
+        ItemModel itemModelAux = new ItemModel();
         itemModel.setId(testId);
         itemModel.setCodeProduto(testId);
-        itemModel.setIdShop(shop);
+        itemModel.setIdShop(shopAux);
         itemModel.setQuantity(2);
 
-        shoppingCartTest.save(shop);
-        itemRepository.save(itemModel);
-        assertNotNull(itemRepository.findById(testId).get());
+        
+        itemModelAux = itemRepository.save(itemModel);
+        assertNotNull(itemRepository.findById(itemModelAux.getId()).get());
     }
 
     @Test
     public void testItemModelError(){
-        long testId = 10; 
+        long testId = 1L; 
         ShoppingCartModel shop = new ShoppingCartModel();
         ItemModel itemModel = new ItemModel();
         itemModel.setId(testId);
