@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
 import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
+import br.com.geofusion.testecarrinhocompras.classes.Item;
 import br.com.geofusion.testecarrinhocompras.classes.Product;
 import br.com.geofusion.testecarrinhocompras.classes.ShoppingCart;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;
@@ -69,18 +70,30 @@ public class ShoppingCartControllerFactory {
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(shoppingCart.getItems());
     }
 
-    // /**
-    //  * Retorna o valor do ticket médio no momento da chamada ao método.
-    //  * O valor do ticket médio é a soma do valor total de todos os carrinhos de compra dividido
-    //  * pela quantidade de carrinhos de compra.
-    //  * O valor retornado deverá ser arredondado com duas casas decimais, seguindo a regra:
-    //  * 0-4 deve ser arredondado para baixo e 5-9 deve ser arredondado para cima.
-    //  *
-    //  * @return BigDecimal
-    //  */
-    // public BigDecimal getAverageTicketAmount() {
-    //     return null;
-    // }
+    /**
+     * Retorna o valor do ticket médio no momento da chamada ao método.
+     * O valor do ticket médio é a soma do valor total de todos os carrinhos de compra dividido
+     * pela quantidade de carrinhos de compra.
+     * O valor retornado deverá ser arredondado com duas casas decimais, seguindo a regra:
+     * 0-4 deve ser arredondado para baixo e 5-9 deve ser arredondado para cima.
+     *
+     * @return BigDecimal
+     */
+    @GetMapping("/Total")
+    public ResponseEntity<String> getAverageTicketAmount() {
+        BigDecimal total = new BigDecimal(0);
+        List<ShoppingCartModel> todosCarrinhos = shoppingCartService.findAll();
+        for (ShoppingCartModel carrinho : todosCarrinhos) {
+            List<ItemModel> itemModelList = itemService.findAllByIdShop(carrinho);
+            ShoppingCart shoppingCart = new ShoppingCart();
+            for (ItemModel itemModelAdd : itemModelList) {
+                Product produtoAdd = new Product(itemModelAdd.getCodeProduto().getCode(), itemModelAdd.getCodeProduto().getDescription());
+                shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
+            }   
+            total = total.add(shoppingCart.getAmount());
+        }
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(total.toString());
+    }
 
     // /**
     //  * Invalida um carrinho de compras quando o cliente faz um checkout ou sua sessão expirar.

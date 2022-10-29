@@ -83,4 +83,16 @@ public class ShoppingCartFactoryTest {
         this.mockMvc.perform(post("/Carrinho?idCliente="+clientModelAux.getClientId()))
         .andExpect(status().isAccepted());
     }
+
+    /**
+     * Teste para ver que quando feito um get no endpoint /Carrinho/Total 
+     * vai ser retornado o status accept
+     * @throws Exception
+     */
+    @Test
+    public void testGetCarrinhoTotal() throws Exception{
+        this.mockMvc.perform(get("/Carrinho/Total"))
+        .andExpect(status().isAccepted());
+    }
+
 }

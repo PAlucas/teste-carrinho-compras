@@ -69,7 +69,11 @@ public class ShoppingCart {
      * @return BigDecimal
      */
     public BigDecimal getAmount() {
-        return null;
+        BigDecimal total = new BigDecimal(0);
+        for (Item item : items) {
+            total = total.add(item.getAmount());          
+        }
+        return total;
     }
 
     /**

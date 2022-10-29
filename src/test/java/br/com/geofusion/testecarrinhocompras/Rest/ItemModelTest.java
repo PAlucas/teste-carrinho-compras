@@ -121,6 +121,8 @@ public class ItemModelTest {
         itemModel.setId(testId);
         itemModel.setCodeProduto(productModel);
         itemModel.setIdShop(shopAux);
+        BigDecimal bigDecimal = new BigDecimal("10.52");
+        itemModel.setUnitPrice(bigDecimal);
         assertThrows(RuntimeException.class, () -> itemRepository.save(itemModel));
     }
 }
