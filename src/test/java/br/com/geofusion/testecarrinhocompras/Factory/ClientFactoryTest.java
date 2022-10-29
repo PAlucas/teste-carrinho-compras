@@ -1,9 +1,7 @@
 package br.com.geofusion.testecarrinhocompras.Factory;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,27 +9,19 @@ import java.nio.charset.Charset;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
-import br.com.geofusion.testecarrinhocompras.classes.Client;
-import br.com.geofusion.testecarrinhocompras.controllers.ClientControllerFactory;
 import br.com.geofusion.testecarrinhocompras.dto.ClientDto;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;
 
@@ -54,9 +44,8 @@ public class ClientFactoryTest {
      * @throws Exception
      */
     @Test
-    public void retornaPostStatusCorreto() throws Exception{
+    public void testPostStatusCorreto() throws Exception{
         ClientDto clientDto = new ClientDto();
-        ClientModel clientRequest = new ClientModel();
         clientDto.setNome("Ana");
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -73,7 +62,7 @@ public class ClientFactoryTest {
      * @throws Exception
      */
     @Test
-    public void retornaPostClient() throws Exception{
+    public void testPostClient() throws Exception{
         ClientDto clientDto = new ClientDto();
         clientDto.setNome("Lucas");
         ObjectMapper mapper = new ObjectMapper();
@@ -96,14 +85,14 @@ public class ClientFactoryTest {
         .andExpect(status().isOk());
     }
 
-        /**
+    /**
      * Teste para ver que quando feito um patch no endpoint /Cliente com 
      * as informações corretas o status vai ser correto e vai retornar 
      * as informações corretas 
      * @throws Exception
      */
     @Test
-    public void retornaPatchClient() throws Exception{
+    public void testPatchClient() throws Exception{
 
         long testId = 1L; 
         ClientModel clientModel = new ClientModel();
@@ -126,5 +115,62 @@ public class ClientFactoryTest {
 
         this.mockMvc.perform(patch("/Cliente/"+clientModelAux.getClientId()).contentType(APPLICATION_JSON_UTF8).content(requestJson))
         .andExpect(status().isCreated()).andExpect(content().string(stringFinal));
+    }
+
+    /**
+     * Teste para ver que quando feito um patch no endpoint /Cliente sem 
+     * as informações corretas o status vai ser de não modificado
+     * @throws Exception
+     */
+    @Test
+    public void testErroPatchClient() throws Exception{
+        
+        ClientDto clientDto = new ClientDto();
+        clientDto.setNome("Lucas Novo");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(clientDto);
+
+        this.mockMvc.perform(patch("/Cliente/0").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+        .andExpect(status().isNotModified());
+    }
+
+    /**
+     * Teste para ver que quando feito um delete no endpoint /Cliente com 
+     * as informações corretas o status vai ser correto e vai retornar 
+     * o cliente que foi deletado
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteClient() throws Exception{
+
+        long testId = 1L; 
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas Teste");
+        clientModelAux = clientService.save(clientModel);
+        
+
+        char aspas = '"';
+        String stringFinal = "{"+aspas+"Cliente Deletado"+aspas+":"+aspas+"Lucas Teste"+aspas+"}";
+
+        this.mockMvc.perform(delete("/Cliente/"+clientModelAux.getClientId()))
+        .andExpect(status().isAccepted()).andExpect(content().string(stringFinal));
+    }
+
+    /**
+     * Teste para ver que quando feito um delete no endpoint /Cliente sem
+     * as informações corretas o status vai ser de não tem conteúdo
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteErroClient() throws Exception{
+
+        this.mockMvc.perform(delete("/Cliente/0"))
+        .andExpect(status().isNoContent());
     }
 }

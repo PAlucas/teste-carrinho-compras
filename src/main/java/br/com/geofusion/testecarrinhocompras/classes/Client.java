@@ -42,12 +42,22 @@ public class Client {
     }
 
     /**
-     * Método para criar um json retorna nome do cliente
+     * Método para criar um json retorna novo nome do cliente
      * @param nome
      */
     public Map<String, String> nomeNovoJson() {
         HashMap<String, String> json = new HashMap<>();
         json.put("Novo nome", this.nome);
+        return json;
+    }
+
+    /**
+     * Método para criar um json retorna nome do cliente deletado
+     * @param nome
+     */
+    public Map<String, String> nomeDeletadoJson() {
+        HashMap<String, String> json = new HashMap<>();
+        json.put("Cliente Deletado", this.nome);
         return json;
     }
 }

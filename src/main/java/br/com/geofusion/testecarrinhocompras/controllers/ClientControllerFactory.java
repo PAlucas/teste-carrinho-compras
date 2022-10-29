@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,12 +76,28 @@ public class ClientControllerFactory {
     public @ResponseBody ResponseEntity<Object> trocarNomeCliente (@PathVariable(value = "client_id") long id,@RequestBody @Valid ClientDto clienteDto) throws ParseException{
         Optional<ClientModel> clientModelOptional = clientService.findById(id);
         if(!clientModelOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body("Cliente não foi encontrado");
         }
         BeanUtils.copyProperties(clienteDto, clientModelOptional.get());
         clientService.save(clientModelOptional.get());
         Client client = new Client(clientModelOptional.get().getNome());
         return ResponseEntity.status(HttpStatus.CREATED).body(client.nomeNovoJson());
+    }
+
+    /**
+     * Método delete que deleta cliente e mostra cliente deletado
+     * @return ResponseEntity<Object>
+     */
+    @DeleteMapping("/{client_id}")
+    public @ResponseBody ResponseEntity<Object> DeletarCliente (@PathVariable(value = "client_id") long id){
+        Optional<ClientModel> clientModelOptional = clientService.findById(id);
+        if(!clientModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Cliente não foi encontrado");
+        }
+        Client client = new Client(clientModelOptional.get().getNome());
+        clientService.delete(clientModelOptional.get());
+        
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.nomeDeletadoJson());
     }
 
 
