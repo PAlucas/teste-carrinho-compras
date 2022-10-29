@@ -9,7 +9,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
+import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
 import br.com.geofusion.testecarrinhocompras.Repository.ClientRepository;
+import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -23,6 +25,9 @@ public class ShoppingCartFactoryTest {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private ShoppingCartRepository shoppingCartRepository;
 
     /**
      * Teste para ver que quando feito um post no endpoint /Carrinho com 
@@ -38,7 +43,7 @@ public class ShoppingCartFactoryTest {
 
     /**
      * Teste para ver que quando feito um post no endpoint /Carrinho com 
-     * o id correto e o cliente já possui carrinho, isso vai retornar 
+     * o id correto e o cliente não possui carrinho, isso vai retornar 
      * "carrinho criado" e o status criado
      * @throws Exception
      */
@@ -52,5 +57,30 @@ public class ShoppingCartFactoryTest {
         clientModelAux = clientRepository.save(clientModel);
         this.mockMvc.perform(post("/Carrinho?idCliente="+clientModelAux.getClientId()))
         .andExpect(status().isCreated()).andExpect(content().string("Carrinho criado"));
+    }
+
+    /**
+     * Teste para ver que quando feito um post no endpoint /Carrinho com 
+     * o id correto e o cliente já possui carrinho, isso vai retornar 
+     * status aceito
+     * @throws Exception
+     */
+    @Test
+    public void testPostCarrinhoClienteIdCorretoExiste() throws Exception{
+        long testId = 1L;
+
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas");
+        clientModelAux = clientRepository.save(clientModel);
+
+        ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        shoppingCartModel.setShopId(testId);
+        shoppingCartModel.setIdClient(clientModelAux);
+        shoppingCartRepository.save(shoppingCartModel);
+
+        this.mockMvc.perform(post("/Carrinho?idCliente="+clientModelAux.getClientId()))
+        .andExpect(status().isAccepted());
     }
 }

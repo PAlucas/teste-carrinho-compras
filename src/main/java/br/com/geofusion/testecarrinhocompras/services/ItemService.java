@@ -37,9 +37,6 @@ public class ItemService {
         List<ItemModel> results = new ArrayList<ItemModel>();
 
         for (ItemModel itemModel : listaItem) {
-            System.out.print(itemModel.getIdShop().getShopId());
-            System.out.print("aqui:"+idShop.getShopId());
-            System.out.print(itemModel.getIdShop() == idShop);
             if(itemModel.getIdShop().equals(idShop)){
                 results.add(itemModel);
             }

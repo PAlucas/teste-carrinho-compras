@@ -2,6 +2,9 @@ package br.com.geofusion.testecarrinhocompras.Rest;
 
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
@@ -62,6 +65,8 @@ public class ItemModelTest {
         itemModel.setCodeProduto(productModelTest);
         itemModel.setIdShop(shopAux);
         itemModel.setQuantity(2);
+        BigDecimal bigDecimal = new BigDecimal(0.01);
+        itemModel.setUnitPrice(bigDecimal);
 
         
         itemModelAux = itemRepository.save(itemModel);

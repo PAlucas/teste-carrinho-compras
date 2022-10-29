@@ -1,6 +1,7 @@
 package br.com.geofusion.testecarrinhocompras.classes;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Classe que representa o carrinho de compras de um cliente.
  */
 public class ShoppingCart {
-    private List<Item> items;
+    private List<Item> items = new ArrayList<Item>();;
 
     /**
      * Permite a adição de um novo item no carrinho de compras.
@@ -77,15 +78,17 @@ public class ShoppingCart {
      * @return items
      */
     public Collection<Item> getItems() {
-        return null;
+        return this.items;
     }
 
     private boolean mudaSeExisteProduto(Product product, BigDecimal unitPrice, int quantity){
-        for (Item item : items) {
-            if(item.getProduct().equals(product)){
-                item.setQuantity(item.getQuantity() + quantity);
-                item.setUnitPrice(unitPrice);
-                return true;
+        if(this.items != null){
+            for (Item item : this.items) {
+                if(item.getProduct().equals(product)){
+                    item.setQuantity(item.getQuantity() + quantity);
+                    item.setUnitPrice(unitPrice);
+                    return true;
+                }
             }
         }
         return false;

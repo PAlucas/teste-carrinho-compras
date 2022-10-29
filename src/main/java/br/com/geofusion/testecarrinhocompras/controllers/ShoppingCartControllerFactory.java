@@ -66,19 +66,9 @@ public class ShoppingCartControllerFactory {
             shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
         }   
         
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(itemModelList);
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(shoppingCart.getItems());
     }
-    //    /**
-    //  * Cria e retorna um novo carrinho de compras para o cliente passado como parâmetro.
-    //  *
-    //  * Caso já exista um carrinho de compras para o cliente passado como parâmetro, este carrinho deverá ser retornado.
-    //  *
-    //  * @param clientId
-    //  * @return ShoppingCart
-    //  */
-    // public ShoppingCart create(String clientId) {
-    //     return null;
-    // }
+
     // /**
     //  * Retorna o valor do ticket médio no momento da chamada ao método.
     //  * O valor do ticket médio é a soma do valor total de todos os carrinhos de compra dividido
