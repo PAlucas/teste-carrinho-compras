@@ -32,7 +32,14 @@ public class ShoppingCartControllerFactory {
     @Autowired
     private ShoppingCartService shoppingCartService;
 
-
+    /**
+     * Cria e retorna um novo carrinho de compras para o cliente passado como parâmetro.
+     *
+     * Caso já exista um carrinho de compras para o cliente passado como parâmetro, este carrinho deverá ser retornado.
+     *
+     * @param clientId
+     * @return ShoppingCart
+     */
     @PostMapping
     public ResponseEntity<Object> saveCarrinho(@RequestParam String idCliente){
         long client_id = Long.parseLong(idCliente);
@@ -41,9 +48,12 @@ public class ShoppingCartControllerFactory {
             return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe Cliente com esse Id");
         }
         Optional<ShoppingCartModel> shoppingCartModelAux = shoppingCartService.findByidClient(clientModelOptional.get());
-        if(shoppingCartModelAux.isPresent()){
-            
-            return  ResponseEntity.status(HttpStatus.CONFLICT).body(shoppingCartModelAux.get());
+
+        if(!shoppingCartModelAux.isPresent()){
+            ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+            shoppingCartModel.setIdClient(clientModelOptional.get());
+            shoppingCartService.save(shoppingCartModel);
+            return  ResponseEntity.status(HttpStatus.CREATED).body("Carrinho criado");
         }
         
         
