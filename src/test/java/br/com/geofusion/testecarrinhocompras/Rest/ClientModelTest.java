@@ -15,6 +15,10 @@ public class ClientModelTest {
     @Autowired
     ClientRepository clientRepository;
 
+    /**
+     * Teste para ver se quando colocado o id correto o cliente e o nome o cliente
+     * vai ser criado
+     */
     @Test
     public void testCliente(){
         long testId = 1L; 

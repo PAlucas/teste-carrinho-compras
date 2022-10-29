@@ -11,7 +11,8 @@ public class ProductModelTest {
     @Autowired
     ProductRepository productRepository;
     /**
-     * Teste para ver se está sendo inserido o item no banco de dados
+     * Teste para ver se quando colocado id e descrição
+     * está sendo inserido o item no banco de dados
      */
     @Test
     public void testCliente(){

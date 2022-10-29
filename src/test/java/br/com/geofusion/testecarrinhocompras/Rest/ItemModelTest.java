@@ -69,11 +69,11 @@ public class ItemModelTest {
     }
 
     /**
-     * Teste para ver se quando não o id correto de um carrinho e o code 
-     * correto de um produto não é possível criar um item
+     * Teste para ver se quando  o id correto de um carrinho e o code 
+     * não correto de um produto não é possível criar um item
      */
     @Test
-    public void testItemModelError(){
+    public void testItemModelSoppingError(){
         long testId = 1L; 
         ShoppingCartModel shop = new ShoppingCartModel();
 
@@ -91,7 +91,7 @@ public class ItemModelTest {
     }
 
     /**
-     * Teste para ver se quando não o id correto de um carrinho e o code 
+     * Teste para ver se quando  o id não correto de um carrinho e o code 
      * correto de um produto não é possível criar um item
      */
     @Test

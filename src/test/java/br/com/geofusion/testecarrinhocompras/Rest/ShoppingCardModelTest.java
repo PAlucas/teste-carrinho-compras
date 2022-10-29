@@ -21,7 +21,7 @@ public class ShoppingCardModelTest {
     ClientRepository clientRepository;
     /**
      * Teste para ver se quando possui o cliente passado
-     * está sendo inserido o carrinho no banco de dados
+     * está sendo inserindo o carrinho no banco de dados
      */
     @Test
     public void testShopping(){
@@ -42,7 +42,7 @@ public class ShoppingCardModelTest {
     }
     /**
      * Teste para ver se quando não possui o cliente passado 
-     * não está sendo inserido o carrinho no banco de dados
+     * não está sendo inserindo o carrinho no banco de dados
      */
     @Test
     public void testErroShopping(){
