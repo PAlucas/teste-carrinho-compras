@@ -28,16 +28,26 @@ public class ItemService {
         return itemRepository.findAll();
     }
     
-    // public List<ItemModel> findAllById(Iterable<ShoppingCartModel> idShop) {
-    //     List<ItemModel> results = new ArrayList<ItemModel>();
+    public Optional<ItemModel> findByIdShop(ShoppingCartModel id) {
+        return itemRepository.findByIdShop(id);
+    }
 
-    //     for (ShoppingCartModel idShops : idShop) {
-    //         findById(idShops).ifPresent(results::add);
-    //     }
+    public List<ItemModel> findAllByIdShop(ShoppingCartModel idShop) {
+        List<ItemModel> listaItem = itemRepository.findAll();
+        List<ItemModel> results = new ArrayList<ItemModel>();
 
-	// 	return results;
+        for (ItemModel itemModel : listaItem) {
+            System.out.print(itemModel.getIdShop().getShopId());
+            System.out.print("aqui:"+idShop.getShopId());
+            System.out.print(itemModel.getIdShop() == idShop);
+            if(itemModel.getIdShop().equals(idShop)){
+                results.add(itemModel);
+            }
+        }
 
-	// }
+		return results;
+
+	}
 
     public boolean existsById(long id) {
         return itemRepository.existsById(id);
@@ -46,10 +56,6 @@ public class ItemService {
     public Optional<ItemModel> findById(long id) {
         return itemRepository.findById(id);
     }
-
-    // public Optional<ItemModel> findByIdShop(ShoppingCartModel id) {
-    //     return itemRepository.findByIdShop(id);
-    // }
 
     @Transactional
     public long delete(ItemModel itemModel) {

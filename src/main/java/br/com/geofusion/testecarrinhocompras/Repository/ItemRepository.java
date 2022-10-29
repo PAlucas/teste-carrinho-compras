@@ -12,5 +12,5 @@ import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
 @Repository
 public interface ItemRepository extends JpaRepository<ItemModel, Long>{
     boolean existsById(Long id);
-    //Optional<ItemModel> findByIdShop(ShoppingCartModel id);
+    Optional<ItemModel> findByIdShop(ShoppingCartModel id);
 }

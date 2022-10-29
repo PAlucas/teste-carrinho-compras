@@ -1,5 +1,6 @@
 package br.com.geofusion.testecarrinhocompras.Model;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.*;
 
@@ -19,7 +20,7 @@ public class ItemModel implements Serializable{
     @Column(nullable = false, length = 255)
     private int quantity;
     @Column(nullable = false, length = 255)
-    private double unitPrice;
+    private BigDecimal unitPrice;
     @ManyToOne
     @JoinColumn(name ="shopId", nullable = false)
     private ShoppingCartModel idShop;
@@ -48,11 +49,11 @@ public class ItemModel implements Serializable{
         this.quantity = quantity;
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return this.unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

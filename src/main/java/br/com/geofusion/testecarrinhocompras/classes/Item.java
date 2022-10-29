@@ -41,12 +41,30 @@ public class Item {
     }
 
     /**
+     * adiciona novo valor para o preço do produto
+     *
+     */
+    public void setUnitPrice(BigDecimal bigDecimal) {
+        this.unitPrice = bigDecimal;
+    }
+
+
+    /**
      * Retorna a quantidade dos item.
      *
      * @return int
      */
     public int getQuantity() {
         return this.quantity;
+    }
+
+    /**
+     * Retorna a quantidade dos item.
+     *
+     * @return int
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     /**

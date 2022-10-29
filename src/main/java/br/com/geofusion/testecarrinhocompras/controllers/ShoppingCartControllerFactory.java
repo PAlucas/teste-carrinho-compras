@@ -1,6 +1,7 @@
 package br.com.geofusion.testecarrinhocompras.controllers;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
+import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
 import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
+import br.com.geofusion.testecarrinhocompras.classes.Product;
 import br.com.geofusion.testecarrinhocompras.classes.ShoppingCart;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;
 import br.com.geofusion.testecarrinhocompras.services.ItemService;
@@ -56,8 +59,14 @@ public class ShoppingCartControllerFactory {
             return  ResponseEntity.status(HttpStatus.CREATED).body("Carrinho criado");
         }
         
+        ShoppingCart shoppingCart = new ShoppingCart();
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModelAux.get());
+        for (ItemModel itemModelAdd : itemModelList) {
+            Product produtoAdd = new Product(itemModelAdd.getCodeProduto().getCode(), itemModelAdd.getCodeProduto().getDescription());
+            shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
+        }   
         
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(idCliente);
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(itemModelList);
     }
     //    /**
     //  * Cria e retorna um novo carrinho de compras para o cliente passado como parâmetro.

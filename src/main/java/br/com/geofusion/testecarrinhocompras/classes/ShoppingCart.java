@@ -25,7 +25,16 @@ public class ShoppingCart {
      * @param quantity
      */
     public void addItem(Product product, BigDecimal unitPrice, int quantity) {
-
+        init(product, unitPrice, quantity);
+    }
+    
+    /**
+     * Método incializador privado.
+     */
+    private void init(Product product, BigDecimal unitPrice, int quantity){
+        if(!mudaSeExisteProduto(product, unitPrice, quantity)){
+            this.items.add(new Item(product, unitPrice, quantity));
+        }
     }
 
     /**
@@ -69,5 +78,16 @@ public class ShoppingCart {
      */
     public Collection<Item> getItems() {
         return null;
+    }
+
+    private boolean mudaSeExisteProduto(Product product, BigDecimal unitPrice, int quantity){
+        for (Item item : items) {
+            if(item.getProduct().equals(product)){
+                item.setQuantity(item.getQuantity() + quantity);
+                item.setUnitPrice(unitPrice);
+                return true;
+            }
+        }
+        return false;
     }
 }
