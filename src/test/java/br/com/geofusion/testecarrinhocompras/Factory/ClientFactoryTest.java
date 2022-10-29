@@ -39,7 +39,7 @@ public class ClientFactoryTest {
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     
     /**
-     * Teste para ver que quando feito um posto no endpoint /Cliente com 
+     * Teste para ver que quando feito um post no endpoint /Cliente com 
      * as informações corretas o status vai ser correto
      * @throws Exception
      */

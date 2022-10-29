@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
 import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 @Service
@@ -26,11 +27,15 @@ public class ShoppingCartService {
         return shoppingCartRepository.findAll();
     }
 
-    public boolean existsByCode(long id) {
+    public Optional<ShoppingCartModel> findByidClient(ClientModel idCliente){
+        return shoppingCartRepository.findByidClient(idCliente);
+    }
+
+    public boolean existsById(long id) {
         return shoppingCartRepository.existsById(id);
     }
 
-    public Optional<ShoppingCartModel> findByCode(long code) {
+    public Optional<ShoppingCartModel> findById(long code) {
         return shoppingCartRepository.findById(code);
     }
 
