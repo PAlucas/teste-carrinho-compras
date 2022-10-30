@@ -23,7 +23,7 @@ public class ClientTest {
 
     /**
      * Teste para ver se quando colocado o nome do
-     * cliente ele vai retornar o json de novo nome
+     * cliente ele vai retornar o map de novo nome
      */
     @Test
     public void testTrocarCliente(){
@@ -35,7 +35,7 @@ public class ClientTest {
 
     /**
      * Teste para ver se quando colocado o nome do
-     * cliente ele vai retornar o json de nome deletado
+     * cliente ele vai retornar o map de nome deletado
      */
     @Test
     public void testDeleteCliente(){
