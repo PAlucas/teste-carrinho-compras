@@ -32,7 +32,7 @@ public class Client {
     }
 
     /**
-     * Método para criar um json retorna nome do cliente
+     * Método para criar um map retorna a chave e o nome do cliente
      * @param nome
      */
     public Map<String, String> json() {
@@ -42,7 +42,7 @@ public class Client {
     }
 
     /**
-     * Método para criar um json retorna novo nome do cliente
+     * Método para criar um map retorna a chave e o nome do cliente novo
      * @param nome
      */
     public Map<String, String> nomeNovoJson() {
@@ -52,7 +52,7 @@ public class Client {
     }
 
     /**
-     * Método para criar um json retorna nome do cliente deletado
+     * Método para criar um map retorna a chave e o nome do cliente deletado
      * @param nome
      */
     public Map<String, String> nomeDeletadoJson() {
