@@ -1,6 +1,8 @@
 package br.com.geofusion.testecarrinhocompras.classes;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe que representa um item no carrinho de compras.
@@ -75,5 +77,20 @@ public class Item {
     public BigDecimal getAmount() {
         BigDecimal total = BigDecimal.valueOf(this.quantity).multiply(this.unitPrice);
         return total;
+    }
+
+    /**
+     * Método para criar um map retorna a chave e a descrição do produto,
+     * a chave e preco unitário do produto, a chave e a quantidade final do produto
+     * e a chave e preço total do produto
+     * @param nome
+     */
+    public Map<String, String> json() {
+        HashMap<String, String> json = new HashMap<>();
+        json.put("Produto", this.product.getDescription());
+        json.put("Preco Unidade", getUnitPrice().toString());
+        json.put("Quantidade", Integer.toString(getQuantity()));
+        json.put("Preco Total", getAmount().toString());
+        return json;
     }
 }
