@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Classe que representa o carrinho de compras de um cliente.
@@ -46,7 +48,18 @@ public class ShoppingCart {
      * caso o produto não exista no carrinho.
      */
     public boolean removeItem(Product product) {
-        return false;
+        boolean foiRemovido = false;
+        List<Item> itemComProduto = this.items.stream().filter((Item item) ->{
+            return item.getProduct().equals(product);    
+        }).collect(Collectors.toList());
+        for (Item itemDelete : itemComProduto) {
+            if(this.items.contains(itemDelete)){
+                this.items.remove(itemDelete);
+                foiRemovido = true;
+            }
+        }
+
+        return foiRemovido;
     }
 
     /**
@@ -59,6 +72,11 @@ public class ShoppingCart {
      * caso o produto não exista no carrinho.
      */
     public boolean removeItem(int itemIndex) {
+        int tamanho = this.items.size();
+        if(tamanho>itemIndex){
+            this.items.remove(itemIndex);
+            return true;
+        }
         return false;
     }
 
@@ -94,6 +112,16 @@ public class ShoppingCart {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+    /**
+     * Método para certificar que não possui nenhum item na lista
+     * @return boolean
+     */
+    public boolean semItens(){
+        if(this.items.size() == 0){
+            return true;
         }
         return false;
     }

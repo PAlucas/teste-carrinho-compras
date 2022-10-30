@@ -54,4 +54,49 @@ public class ShoppingCartTest {
         
         assertEquals(bigDecimal2, itemFinal.getUnitPrice());
     }
+
+    /**
+     * Teste para ver se quando o carrinho está sem itens
+     * o método semItems vai retornar true
+     */
+    @Test
+    public void testSemItems(){
+        ShoppingCart shoppingCart = new ShoppingCart();
+        
+        assertEquals(true, shoppingCart.semItens());
+    }
+
+    /**
+     * Teste para ver se quando o carrinho está com itens
+     * o método removeItem recebendo um produto vai
+     * retirar item com esse produto
+     */
+    @Test
+    public void testRemoveItemProduto(){
+        long testId = 12;
+        BigDecimal bigDecimal = new BigDecimal("10.52");
+        ShoppingCart shoppingCart = new ShoppingCart();
+        Product produto = new Product(testId, "Produto Teste");
+        shoppingCart.addItem(produto, bigDecimal, 3);
+
+        
+        assertEquals(true, shoppingCart.removeItem(produto));
+    }
+
+    /**
+     * Teste para ver se quando o carrinho está com itens
+     * o método removeItem recebendo um inteiro 
+     * vai retirar o item nessa posição
+     */
+    @Test
+    public void testRemoveItemInt(){
+        long testId = 12;
+        BigDecimal bigDecimal = new BigDecimal("10.52");
+        ShoppingCart shoppingCart = new ShoppingCart();
+        Product produto = new Product(testId, "Produto Teste");
+        shoppingCart.addItem(produto, bigDecimal, 3);
+
+        
+        assertEquals(true, shoppingCart.removeItem(0));
+    }
 }

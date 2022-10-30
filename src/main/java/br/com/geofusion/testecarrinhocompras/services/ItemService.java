@@ -37,6 +37,7 @@ public class ItemService {
         List<ItemModel> results = new ArrayList<ItemModel>();
 
         for (ItemModel itemModel : listaItem) {
+
             if(itemModel.getIdShop().equals(idShop)){
                 results.add(itemModel);
             }

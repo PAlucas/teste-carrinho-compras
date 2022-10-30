@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,15 +96,39 @@ public class ShoppingCartControllerFactory {
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(total.toString());
     }
 
-    // /**
-    //  * Invalida um carrinho de compras quando o cliente faz um checkout ou sua sessão expirar.
-    //  * Deve ser efetuada a remoção do carrinho do cliente passado como parâmetro da listagem de carrinhos de compras.
-    //  *
-    //  * @param clientId
-    //  * @return Retorna um boolean, tendo o valor true caso o cliente passado como parämetro tenha um carrinho de compras e
-    //  * e false caso o cliente não possua um carrinho.
-    //  */
-    // public boolean invalidate(String clientId) {
-    //     return false;
-    // }
+    /**
+     * Invalida um carrinho de compras quando o cliente faz um checkout ou sua sessão expirar.
+     * Deve ser efetuada a remoção do carrinho do cliente passado como parâmetro da listagem de carrinhos de compras.
+     *
+     * @param clientId
+     * @return Retorna um boolean, tendo o valor true caso o cliente passado como parämetro tenha um carrinho de compras e
+     * e false caso o cliente não possua um carrinho.
+     */
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteCarrinho(@RequestParam String idCliente) {
+        long client_id = Long.parseLong(idCliente);
+        Optional<ClientModel> clientModelOptional =  clientService.findById(client_id);
+
+        if(!clientModelOptional.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
+        Optional<ShoppingCartModel> shoppingCartModelAux = shoppingCartService.findByidClient(clientModelOptional.get());
+        if(!shoppingCartModelAux.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
+
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModelAux.get());
+        ShoppingCart shoppingCart = new ShoppingCart();
+        for (ItemModel itemModelAdd : itemModelList) {
+            Product produtoAdd = new Product(itemModelAdd.getCodeProduto().getCode(), itemModelAdd.getCodeProduto().getDescription());
+            shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
+            shoppingCart.removeItem(produtoAdd);
+            itemService.delete(itemModelAdd);
+        } 
+        if(shoppingCart.semItens()){
+            shoppingCartService.delete(shoppingCartModelAux.get());
+        }
+        
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(true);
+    }
 }
