@@ -51,4 +51,14 @@ public class ProductFactoryTest {
         this.mockMvc.perform(post("/Produto").contentType(APPLICATION_JSON_UTF8).content(requestJson))
         .andExpect(status().isCreated()).andExpect(content().string(stringFinal));
     }
+
+    /**
+     * Teste para ver se o get vai ter o status correto
+     * @throws Exception
+     */
+    @Test
+    public void retornaGetClient() throws Exception{
+        this.mockMvc.perform(get("/Produto"))
+        .andExpect(status().isOk());
+    }
 }
