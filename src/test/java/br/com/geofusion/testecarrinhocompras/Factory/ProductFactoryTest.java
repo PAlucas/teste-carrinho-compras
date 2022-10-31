@@ -46,10 +46,8 @@ public class ProductFactoryTest {
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(productDto);
-        char aspas = '"';
-        String stringFinal = "{"+aspas+"Descricao"+aspas+":"+aspas+"Produto Teste"+aspas+"}";
         this.mockMvc.perform(post("/Produto").contentType(APPLICATION_JSON_UTF8).content(requestJson))
-        .andExpect(status().isCreated()).andExpect(content().string(stringFinal));
+        .andExpect(status().isCreated());
     }
 
     /**

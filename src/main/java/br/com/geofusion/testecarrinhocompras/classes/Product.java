@@ -50,6 +50,7 @@ public class Product {
      */
     public Map<String, String> json() {
         HashMap<String, String> json = new HashMap<>();
+        json.put("Code", Long.toString(this.code));
         json.put("Descricao", this.description);
         return json;
     }

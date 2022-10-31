@@ -17,7 +17,7 @@ public class ProductTest {
         long test_id = 10;
         Product product = new Product(test_id, "Produto Teste");
 
-        String stringFinal = "{Descricao=Produto Teste}";
+        String stringFinal = "{Descricao=Produto Teste, Code=10}";
 
         assertEquals(stringFinal, product.json().toString());
     }
