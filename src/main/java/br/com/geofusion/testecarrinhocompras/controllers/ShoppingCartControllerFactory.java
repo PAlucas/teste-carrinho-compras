@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,6 +72,31 @@ public class ShoppingCartControllerFactory {
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(shoppingCart.getItems());
     }
 
+    /**
+     * Pegar todos os itens do carrinho de um cliente
+     * @param idCliente
+     * @return ResponseEntity<Object>
+     */
+    @GetMapping("/{client_id}")
+    public ResponseEntity<Object> mostraCarrinho(@PathVariable(value = "client_id") long idCliente){;
+        Optional<ClientModel> clientModelOptional =  clientService.findById(idCliente);
+        if(!clientModelOptional.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe Cliente com esse Id");
+        }
+
+        Optional<ShoppingCartModel> shoppingCartModelAux = shoppingCartService.findByidClient(clientModelOptional.get());
+        if(!shoppingCartModelAux.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Carrinho não existe");
+        }
+        ShoppingCart shoppingCart = new ShoppingCart();
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModelAux.get());
+        for (ItemModel itemModelAdd : itemModelList) {
+            Product produtoAdd = new Product(itemModelAdd.getCodeProduto().getCode(), itemModelAdd.getCodeProduto().getDescription());
+            shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
+        }   
+        
+        return  ResponseEntity.status(HttpStatus.OK).body(shoppingCart.getItems());
+    }
     /**
      * Retorna o valor do ticket médio no momento da chamada ao método.
      * O valor do ticket médio é a soma do valor total de todos os carrinhos de compra dividido

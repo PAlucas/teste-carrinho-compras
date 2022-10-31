@@ -169,4 +169,45 @@ public class ShoppingCartFactoryTest {
         this.mockMvc.perform(delete("/Carrinho?idCliente="+clientModelAux.getClientId()))
         .andExpect(status().isConflict());
     }
+
+    /**
+     * Teste para ver que quando feito um get no endpoint /Carrinho/{id_client}
+     * tendo o id do cliente correto e o cliente tendo carrinho com itens
+     * os itens do cliente vão ser mostrados
+     * @throws Exception
+     */
+    @Test
+    public void testMostraItensCarrinho() throws Exception{
+        long testId = 1L;
+
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas");
+        clientModelAux = clientRepository.save(clientModel);
+
+        ShoppingCartModel shoppingCartModelAux = new ShoppingCartModel();
+        ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        shoppingCartModel.setShopId(testId);
+        shoppingCartModel.setIdClient(clientModelAux);
+        shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
+
+        ProductModel productModelAux = new ProductModel();
+        ProductModel productModel = new ProductModel();
+        productModel.setCode(testId);
+        productModel.setDescription("Produto teste");
+        productModelAux = productRepository.save(productModel);
+        
+
+        ItemModel itemModel = new ItemModel();
+        itemModel.setId(testId);
+        itemModel.setCodeProduto(productModelAux);
+        itemModel.setIdShop(shoppingCartModelAux);
+        BigDecimal bigDecimal = new BigDecimal("10.52");
+        itemModel.setUnitPrice(bigDecimal);
+        itemRepository.save(itemModel);
+        
+        this.mockMvc.perform(get("/Carrinho/"+clientModelAux.getClientId()))
+        .andExpect(status().isOk());
+    }
 }
