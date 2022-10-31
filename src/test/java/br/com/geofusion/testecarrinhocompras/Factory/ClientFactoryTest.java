@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,12 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
+import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
+import br.com.geofusion.testecarrinhocompras.Model.ProductModel;
+import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
+import br.com.geofusion.testecarrinhocompras.Repository.ItemRepository;
+import br.com.geofusion.testecarrinhocompras.Repository.ProductRepository;
+import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 import br.com.geofusion.testecarrinhocompras.dto.ClientDto;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;
 
@@ -35,6 +42,15 @@ public class ClientFactoryTest {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private ShoppingCartRepository shoppingCartRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
     
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     
@@ -136,6 +152,51 @@ public class ClientFactoryTest {
 
         this.mockMvc.perform(patch("/Cliente/0").contentType(APPLICATION_JSON_UTF8).content(requestJson))
         .andExpect(status().isNotModified());
+    }
+
+    /**
+     * Teste para ver que quando feito um delete no endpoint /Cliente com 
+     * as informações corretas e com um carrinho e itens, o carrinho, o cliente e os itens
+     * vão ser deletados retorna
+     * o cliente que foi deletado
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteCarrinhoItemClient() throws Exception{
+
+        long testId = 1L; 
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas Teste");
+        clientModelAux = clientService.save(clientModel);
+        
+        ShoppingCartModel shoppingCartModelAux = new ShoppingCartModel();
+        ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        shoppingCartModel.setShopId(testId);
+        shoppingCartModel.setIdClient(clientModelAux);
+        shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
+
+        ProductModel productModelAux = new ProductModel();
+        ProductModel productModel = new ProductModel();
+        productModel.setCode(testId);
+        productModel.setDescription("Produto teste");
+        productModelAux = productRepository.save(productModel);
+        
+
+        ItemModel itemModel = new ItemModel();
+        itemModel.setId(testId);
+        itemModel.setCodeProduto(productModelAux);
+        itemModel.setIdShop(shoppingCartModelAux);
+        BigDecimal bigDecimal = new BigDecimal("10.52");
+        itemModel.setUnitPrice(bigDecimal);
+        itemRepository.save(itemModel);
+
+        char aspas = '"';
+        String stringFinal = "{"+aspas+"Cliente Deletado"+aspas+":"+aspas+"Lucas Teste"+aspas+"}";
+
+        this.mockMvc.perform(delete("/Cliente/"+clientModelAux.getClientId()))
+        .andExpect(status().isAccepted()).andExpect(content().string(stringFinal));
     }
 
     /**

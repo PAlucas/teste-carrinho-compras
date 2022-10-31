@@ -23,15 +23,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
+import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
+import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
 import br.com.geofusion.testecarrinhocompras.classes.Client;
+import br.com.geofusion.testecarrinhocompras.classes.Product;
+import br.com.geofusion.testecarrinhocompras.classes.ShoppingCart;
 import br.com.geofusion.testecarrinhocompras.dto.ClientDto;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;
+import br.com.geofusion.testecarrinhocompras.services.ItemService;
+import br.com.geofusion.testecarrinhocompras.services.ShoppingCartService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/Cliente")
 public class ClientControllerFactory {
-    
+    final ShoppingCartService shoppingCartService;     
+    final ItemService itemService;   
+    public ClientControllerFactory(ShoppingCartService shoppingCartService, ItemService itemService){
+        this.shoppingCartService = shoppingCartService;
+        this.itemService = itemService;
+    }
     @Autowired
     ClientService clientService;
 
@@ -95,8 +106,25 @@ public class ClientControllerFactory {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Cliente não foi encontrado");
         }
         Client client = new Client(clientModelOptional.get().getNome());
+
+
+        Optional<ShoppingCartModel> shoppingCartModelAux = shoppingCartService.findByidClient(clientModelOptional.get());
+        if(!shoppingCartModelAux.isPresent()){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.nomeDeletadoJson());
+        }
+
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModelAux.get());
+        ShoppingCart shoppingCart = new ShoppingCart();
+        for (ItemModel itemModelAdd : itemModelList) {
+            Product produtoAdd = new Product(itemModelAdd.getCodeProduto().getCode(), itemModelAdd.getCodeProduto().getDescription());
+            shoppingCart.addItem(produtoAdd, itemModelAdd.getUnitPrice(), itemModelAdd.getQuantity());
+            shoppingCart.removeItem(produtoAdd);
+            itemService.delete(itemModelAdd);
+        } 
+        if(shoppingCart.semItens()){
+            shoppingCartService.delete(shoppingCartModelAux.get());
+        }
         clientService.delete(clientModelOptional.get());
-        
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.nomeDeletadoJson());
     }
 
