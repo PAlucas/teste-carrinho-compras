@@ -211,4 +211,59 @@ public class ItemFactoryTest {
         this.mockMvc.perform(delete("/Item/"+itemModelAux.getId()+"?idCart="+shoppingCartModelAux.getShopId()))
         .andExpect(status().isAccepted()).andExpect(content().string(stringFinal));
     }
+
+    /**
+     * Teste para ver que quando feito um patch no endpoint /Item
+     * tendo o id do carrinho correto e o id correto
+     * todos os itens no carrinho que tem o 
+     * produto igual ao item que teve seu id passado
+     * vão ter o valor unitário modificado
+     * @throws Exception
+     */
+    @Test
+    public void testPatchItem() throws Exception{
+        long testId = 1L;
+
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas");
+        clientModelAux = clientRepository.save(clientModel);
+
+        ShoppingCartModel shoppingCartModelAux = new ShoppingCartModel();
+        ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        shoppingCartModel.setShopId(testId);
+        shoppingCartModel.setIdClient(clientModelAux);
+        shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
+
+        ProductModel productModel = new ProductModel();
+        ProductModel productModelAux = new ProductModel();
+        productModel.setCode(testId);
+        productModel.setDescription("Produto teste");
+        productModelAux = productRepository.save(productModel);
+        
+
+        ItemModel itemModel = new ItemModel();
+        ItemModel itemModelAux = new ItemModel();
+        itemModel.setId(testId);
+        itemModel.setCodeProduto(productModelAux);
+        itemModel.setIdShop(shoppingCartModelAux);
+        itemModel.setQuantity(9);
+        BigDecimal valor = new BigDecimal("10.90");
+        itemModel.setUnitPrice(valor);
+        itemModelAux = itemRepository.save(itemModel);
+
+        ItemDto itemDto = new ItemDto();
+        itemDto.setUnitPrice("12.90");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson=ow.writeValueAsString(itemDto);
+
+        char aspas = '"';
+        String stringFinal = "{"+aspas+"Preco Total"+aspas+":"+aspas+"116.10"+aspas+","+aspas+"Preco Unidade"+aspas+":"+aspas+"12.90"+aspas+","+aspas+"Produto"+aspas+":"+aspas+"Produto teste"+aspas+","+aspas+"Quantidade"+aspas+":"+aspas+"9"+aspas+"}";
+
+        this.mockMvc.perform(patch("/Item/"+itemModelAux.getId()+"?idCart="+shoppingCartModelAux.getShopId()).contentType(APPLICATION_JSON_UTF8).content(requestJson))
+        .andExpect(status().isCreated()).andExpect(content().string(stringFinal));
+    }
 }

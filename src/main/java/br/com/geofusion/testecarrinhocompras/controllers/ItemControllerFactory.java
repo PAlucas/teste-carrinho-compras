@@ -1,5 +1,6 @@
 package br.com.geofusion.testecarrinhocompras.controllers;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -101,10 +103,14 @@ public class ItemControllerFactory {
         if(!shoppingCartModel.isPresent()){
             return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe carrinho com esse Id");
         }
-        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModel.get());
-        if(itemModelList.size() == 0){
+        Optional<ItemModel> itemModelOptional = itemService.findById(itemId);
+        if(!itemModelOptional.isPresent()){
             return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe item com esse Id no carrinho");
         }
+        if(itemModelOptional.get().getIdShop().getShopId() != shoppingCartId){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe item com esse Id no carrinho");
+        }
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModel.get());
 
         Optional<ItemModel> itemModelAux = itemService.findById(itemId);
         List<ItemModel> itemModelListComId = itemModelList.stream().filter((ItemModel item) ->{
@@ -124,5 +130,47 @@ public class ItemControllerFactory {
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(itemExcluido.json());
     }
 
+    /**
+     * Cria e retorna um novo Item
+     *
+     * @return Item
+     */
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<Object> mudarPrecoItem(@PathVariable(value = "itemId") long itemId,@RequestBody @Valid Map<Object, Object> itemDto, @RequestParam String idCart) throws ParseException {
+        long idShoppingCart = Long.parseLong(idCart);
+        Optional<ShoppingCartModel> shoppingCartModel = shoppingCartService.findById(idShoppingCart);
+        if(!shoppingCartModel.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe carrinho com esse Id");
+        }
+        Optional<ItemModel> itemModelOptional = itemService.findById(itemId);
+        if(!itemModelOptional.isPresent()){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe item com esse Id no carrinho");
+        }
+        if(itemModelOptional.get().getIdShop().getShopId() != idShoppingCart){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não existe item com esse Id no carrinho");
+        }
+        if(!itemDto.containsKey("unitPrice")){
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Não contem preco de unidade");
+        }
 
+        List<ItemModel> itemModelList = itemService.findAllByIdShop(shoppingCartModel.get());
+        
+        Optional<ItemModel> itemModelAux = itemService.findById(itemId);
+        List<ItemModel> itemModelListComId = itemModelList.stream().filter((ItemModel item) ->{
+            return item.getCodeProduto().equals(itemModelAux.get().getCodeProduto());
+        }).collect(Collectors.toList());
+
+        BigDecimal valorTrocar = new BigDecimal(itemDto.get("unitPrice").toString());
+        Product newProduct = new Product(itemModelListComId.get(0).getCodeProduto().getCode(), itemModelListComId.get(0).getCodeProduto().getDescription());
+        ShoppingCart shoppingCartPegarItens = new ShoppingCart();
+        for (ItemModel itemModelTrocarPreco : itemModelList) {
+            if(itemModelTrocarPreco.getCodeProduto().getCode() == itemModelAux.get().getCodeProduto().getCode()){
+                itemModelTrocarPreco.setUnitPrice(valorTrocar);
+                shoppingCartPegarItens.addItem(newProduct, valorTrocar, itemModelTrocarPreco.getQuantity());
+                itemService.save(itemModelTrocarPreco);
+            };
+        }
+        Item itemFinal = (Item)shoppingCartPegarItens.getItems().toArray()[0];
+        return  ResponseEntity.status(HttpStatus.CREATED).body(itemFinal.json());
+    }
 }
