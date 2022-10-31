@@ -121,6 +121,15 @@ public class ShoppingCartControllerFactory {
         }
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(total.toString());
     }
+    
+    /**
+     * Trazer todos os carrinhos com informações do id dele e do cliente que ele pertence
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<List<ShoppingCartModel>> mostrarTodosOsCarrinhos(){
+        return ResponseEntity.status(HttpStatus.OK).body(shoppingCartService.findAll());
+    }
 
     /**
      * Invalida um carrinho de compras quando o cliente faz um checkout ou sua sessão expirar.

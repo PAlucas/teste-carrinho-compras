@@ -108,6 +108,17 @@ public class ShoppingCartFactoryTest {
     }
 
     /**
+     * Teste para ver que quando feito um get no endpoint /Carrinho 
+     * vai ser retornado o status ok
+     * @throws Exception
+     */
+    @Test
+    public void testGetTodosCarrinhos() throws Exception{
+        this.mockMvc.perform(get("/Carrinho"))
+        .andExpect(status().isOk());
+    }
+
+    /**
      * Teste para ver que quando feito um delete no endpoint /Carrinho/Total
      * tendo o id do cliente correto e o cliente tendo carrinho
      * o carrinho vai ser deletado e se o carrinho tiver itens 

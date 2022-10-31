@@ -106,7 +106,7 @@ public class ShoppingCart {
     private boolean mudaSeExisteProduto(Product product, BigDecimal unitPrice, int quantity){
         if(this.items != null){
             for (Item item : this.items) {
-                if(item.getProduct().getCode() == product.getCode()){
+                if(item.getProduct().getCode().equals(product.getCode())){
                     item.setQuantity(item.getQuantity() + quantity);
                     item.setUnitPrice(unitPrice);
                     return true;
