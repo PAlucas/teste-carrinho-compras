@@ -78,13 +78,14 @@ public class ItemFactoryTest {
         shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
 
         ProductModel productModel = new ProductModel();
+        ProductModel productModelAux = new ProductModel();
         productModel.setCode(testId);
         productModel.setDescription("Produto teste");
-        productRepository.save(productModel);
+        productModelAux = productRepository.save(productModel);
         
 
         ItemDto itemDto = new ItemDto();
-        itemDto.setCode(Long.toString(productModel.getCode()));
+        itemDto.setCode(Long.toString(productModelAux.getCode()));
         itemDto.setQuantity("9");
         itemDto.setUnitPrice("10.90");
         ObjectMapper mapper = new ObjectMapper();
@@ -111,13 +112,14 @@ public class ItemFactoryTest {
         long testId = 1L;
 
         ProductModel productModel = new ProductModel();
+        ProductModel productModelAux = new ProductModel();
         productModel.setCode(testId);
         productModel.setDescription("Produto teste");
-        productRepository.save(productModel);
+        productModelAux = productRepository.save(productModel);
         
 
         ItemDto itemDto = new ItemDto();
-        itemDto.setCode(Long.toString(productModel.getCode()));
+        itemDto.setCode(Long.toString(productModelAux.getCode()));
         itemDto.setQuantity("9");
         itemDto.setUnitPrice("10.90");
         ObjectMapper mapper = new ObjectMapper();
@@ -125,7 +127,7 @@ public class ItemFactoryTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson=ow.writeValueAsString(itemDto);
 
-        this.mockMvc.perform(post("/Item?idCart=0").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+        this.mockMvc.perform(post("/Item?idCart=0000").contentType(APPLICATION_JSON_UTF8).content(requestJson))
         .andExpect(status().isConflict()).andExpect(content().string("Não existe carrinho com esse Id"));
     }
 
