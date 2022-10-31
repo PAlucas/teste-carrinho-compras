@@ -2,6 +2,7 @@ package br.com.geofusion.testecarrinhocompras.Factory;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
 import br.com.geofusion.testecarrinhocompras.Model.ProductModel;
@@ -25,7 +26,10 @@ import br.com.geofusion.testecarrinhocompras.Repository.ItemRepository;
 import br.com.geofusion.testecarrinhocompras.Repository.ProductRepository;
 import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 import br.com.geofusion.testecarrinhocompras.dto.ItemDto;
+import br.com.geofusion.testecarrinhocompras.services.ItemService;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -158,5 +162,53 @@ public class ItemFactoryTest {
 
         this.mockMvc.perform(post("/Item?idCart="+shoppingCartModelAux.getShopId()).contentType(APPLICATION_JSON_UTF8).content(requestJson))
         .andExpect(status().isConflict()).andExpect(content().string("Não existe produto com esse código"));
+    }
+
+    /**
+     * Teste para ver que quando feito um delete no endpoint /Item
+     * tendo o id do carrinho correto e o id correto
+     * todos os itens no carrinho que tem o 
+     * produto igual ao item que teve seu id passado
+     * vão ser apagados
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteItem() throws Exception{
+        long testId = 1L;
+
+        ClientModel clientModel = new ClientModel();
+        ClientModel clientModelAux = new ClientModel();
+        clientModel.setClientId(testId);
+        clientModel.setNome("Lucas");
+        clientModelAux = clientRepository.save(clientModel);
+
+        ShoppingCartModel shoppingCartModelAux = new ShoppingCartModel();
+        ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
+        shoppingCartModel.setShopId(testId);
+        shoppingCartModel.setIdClient(clientModelAux);
+        shoppingCartModelAux = shoppingCartRepository.save(shoppingCartModel);
+
+        ProductModel productModel = new ProductModel();
+        ProductModel productModelAux = new ProductModel();
+        productModel.setCode(testId);
+        productModel.setDescription("Produto teste");
+        productModelAux = productRepository.save(productModel);
+        
+
+        ItemModel itemModel = new ItemModel();
+        ItemModel itemModelAux = new ItemModel();
+        itemModel.setId(testId);
+        itemModel.setCodeProduto(productModelAux);
+        itemModel.setIdShop(shoppingCartModelAux);
+        itemModel.setQuantity(9);
+        BigDecimal valor = new BigDecimal("10.90");
+        itemModel.setUnitPrice(valor);
+        itemModelAux = itemRepository.save(itemModel);
+
+        char aspas = '"';
+        String stringFinal = "{"+aspas+"Preco Total"+aspas+":"+aspas+"98.1"+aspas+","+aspas+"Preco Unidade"+aspas+":"+aspas+"10.9"+aspas+","+aspas+"Produto"+aspas+":"+aspas+"Produto teste"+aspas+","+aspas+"Quantidade"+aspas+":"+aspas+"9"+aspas+"}";
+
+        this.mockMvc.perform(delete("/Item/"+itemModelAux.getId()+"?idCart="+shoppingCartModelAux.getShopId()))
+        .andExpect(status().isAccepted()).andExpect(content().string(stringFinal));
     }
 }
