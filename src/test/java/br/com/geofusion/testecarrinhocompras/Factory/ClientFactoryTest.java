@@ -102,6 +102,16 @@ public class ClientFactoryTest {
     }
 
     /**
+     * Teste para ver se o get com id vai ter o status correto
+     * @throws Exception
+     */
+    @Test
+    public void retornaGetClientComId() throws Exception{
+        this.mockMvc.perform(get("/Cliente/Id"))
+        .andExpect(status().isOk());
+    }
+
+    /**
      * Teste para ver que quando feito um patch no endpoint /Cliente com 
      * as informações corretas o status vai ser correto e vai retornar 
      * as informações corretas 

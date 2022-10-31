@@ -80,6 +80,15 @@ public class ClientControllerFactory {
     }
 
     /**
+     * Método get que mostra todos os clientes que foram cadastrados no banco de dados com os ids
+     * @return ResponseEntity<List<ClientModel>>
+     */
+    @GetMapping("/Id")
+    public @ResponseBody ResponseEntity<List<ClientModel>> todosClientesComId() {
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.findAll());
+    }
+
+    /**
      * Método patch que mostra troca o nome do cliente com base no id passado na url
      * @return ResponseEntity<Object>
      */
