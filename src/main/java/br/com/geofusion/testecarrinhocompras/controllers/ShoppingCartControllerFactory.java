@@ -1,6 +1,7 @@
 package br.com.geofusion.testecarrinhocompras.controllers;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,7 +120,7 @@ public class ShoppingCartControllerFactory {
             }   
             total = total.add(shoppingCart.getAmount());
         }
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(total.toString());
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(total.setScale(2, RoundingMode.HALF_EVEN).toString());
     }
     
     /**
