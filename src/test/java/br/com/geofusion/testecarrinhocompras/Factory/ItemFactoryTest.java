@@ -2,7 +2,6 @@ package br.com.geofusion.testecarrinhocompras.Factory;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
 import br.com.geofusion.testecarrinhocompras.Model.ProductModel;
@@ -26,10 +24,6 @@ import br.com.geofusion.testecarrinhocompras.Repository.ItemRepository;
 import br.com.geofusion.testecarrinhocompras.Repository.ProductRepository;
 import br.com.geofusion.testecarrinhocompras.Repository.ShoppingCartRepository;
 import br.com.geofusion.testecarrinhocompras.dto.ItemDto;
-import br.com.geofusion.testecarrinhocompras.services.ItemService;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

@@ -2,7 +2,6 @@ package br.com.geofusion.testecarrinhocompras.controllers;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;

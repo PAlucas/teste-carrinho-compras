@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.geofusion.testecarrinhocompras.Model.ClientModel;
 import br.com.geofusion.testecarrinhocompras.Model.ItemModel;
 import br.com.geofusion.testecarrinhocompras.Model.ShoppingCartModel;
-import br.com.geofusion.testecarrinhocompras.classes.Item;
 import br.com.geofusion.testecarrinhocompras.classes.Product;
 import br.com.geofusion.testecarrinhocompras.classes.ShoppingCart;
 import br.com.geofusion.testecarrinhocompras.services.ClientService;

@@ -1,7 +1,6 @@
 package br.com.geofusion.testecarrinhocompras.Factory;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.charset.Charset;
@@ -20,16 +19,12 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import br.com.geofusion.testecarrinhocompras.dto.ProductDto;
-import br.com.geofusion.testecarrinhocompras.services.ProductService;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 public class ProductFactoryTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ProductService prductService;
     
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     /**
