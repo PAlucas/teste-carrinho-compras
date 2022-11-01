@@ -2,7 +2,7 @@
 
 ## Intodução
 
-Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funcionalidade:
+Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funcionalidades:
 - adicionar clientes
 - mudar nome de clientes
 - adicionar carrinho para os clientes(cada cliente podeter apenas um carrinho) 
