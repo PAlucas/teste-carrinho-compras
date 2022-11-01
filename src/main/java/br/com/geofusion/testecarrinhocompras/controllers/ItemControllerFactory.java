@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -128,6 +129,16 @@ public class ItemControllerFactory {
         Item itemExcluido = (Item)items[0];
 
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(itemExcluido.json());
+    }
+
+    /**
+     * Método criado para facilitar nos testes e poder ver 
+     * o id do item sem precisar consultar o banco de dados
+     * @return ResponseEntity<List<ItemModel>>
+     */
+    @GetMapping
+    public ResponseEntity<List<ItemModel>> mostrarTodosItens(){
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.findAll());
     }
 
     /**

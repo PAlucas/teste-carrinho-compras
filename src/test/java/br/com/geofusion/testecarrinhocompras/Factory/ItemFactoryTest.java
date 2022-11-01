@@ -167,6 +167,16 @@ public class ItemFactoryTest {
     }
 
     /**
+     * Teste para ver se o get vai ter o status correto
+     * @throws Exception
+     */
+    @Test
+    public void retornaGetClient() throws Exception{
+        this.mockMvc.perform(get("/Item"))
+        .andExpect(status().isOk());
+    }
+
+    /**
      * Teste para ver que quando feito um delete no endpoint /Item
      * tendo o id do carrinho correto e o id correto
      * todos os itens no carrinho que tem o 
