@@ -1,5 +1,24 @@
 # teste-carrinho-compras
 
+# Estrutura do Documento
+- [Introdução](#intodução)
+- [Tecnologias](#tecnologias)
+  - [Linguagem](#linguagem)
+  - [Gerenciador de dependências](#gerenciador-de-dependências)
+  - [Banco de dados](#banco-de-dados)
+  - [Spring](#spring)
+  - [Dependencia de conexão com oracle](#dependencia-de-conexão-com-oracle)
+- [Como iniciar o projeto](#como-iniciar-o-projeto)
+  - [Manualmente](#manualmente)
+  - [Oracle com docker](#oracle-com-docker)
+- [Caminho de Funcionalidades](#caminho-de-funcionalidades)
+  - [Pricipais](#principais)
+  - [Cliente](#cliente)
+  - [Carrinho](#carrinho)
+  - [Produto](#produto)
+  - [Item](#item)
+  
+
 ## Intodução
 
 Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funcionalidades:
