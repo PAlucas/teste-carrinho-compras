@@ -35,12 +35,7 @@ Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funci
 { "description": "Revista" }
 ![image](https://user-images.githubusercontent.com/44738000/199131322-f86b4df6-12ca-4c54-9de5-ee97fc341bf5.png)
 - PATCH localhost:8081/Pedido/{idItem}?idCart={idCart} - altera preco 
-- Body {
-    "Preco Total": "232.20",
-    "Preco Unidade": "12.90",
-    "Produto": "Produto Teste",
-    "Quantidade": "18"
-}
+- Body { "unitPrice": "12.90"}
 ![image](https://user-images.githubusercontent.com/44738000/199131863-54f10efa-1761-4a84-8526-fe97a9048f88.png)
 - POST localhost:8081/Carrinho?idCliente={idClient} - cria carrinho
 - Obs: se o cliente tiver um carrinho não vai ser criado um novo, vai retornar o carrinho que ele possui.
@@ -90,6 +85,34 @@ Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funci
 - obs: ao deletar o carrinho todos os itens dentro dele serão deletados
 ![image](https://user-images.githubusercontent.com/44738000/199135751-df479a9c-3ab3-4851-9307-a0e009fcb8df.png)
 - return true foi deletado, false não foi deletado
+
+### Produto 
+- POST localhost:8081/Produto - adiciona produto
+- Body
+{ "description": "Livro" }
+![image](https://user-images.githubusercontent.com/44738000/199137281-1c6754c0-9a70-43a3-9d08-66a67a4de5e6.png)
+
+- Get localhost:8081/Produto - lista de todos os produtos
+- ![image](https://user-images.githubusercontent.com/44738000/199137438-e486a2af-d5ea-4516-9890-e4ab1f0b8a67.png)
+
+### Item
+- POST localhost:8081/Item?idCart={idShoppingCart} - insere novo item no carrinho que foi passado como parâmetro
+- Body
+{ "code": "10", "quantity": "4", "unitPrice": "10"}
+![image](https://user-images.githubusercontent.com/44738000/199137939-1047678f-af44-4c3a-b7f9-48f6a5b10ce1.png)
+
+- DELETE localhost:8081/Item/{itemId}?idCart={idShoppingCart} - delete item em determinado carrinho
+- ![image](https://user-images.githubusercontent.com/44738000/199138250-40a45ba0-3137-406d-b9c9-ad97badd1b10.png)
+
+- Get localhost:8081/Item - mostra todos os itens com todas informações(endpoint criado com o intuito de facilitar testes)
+- ![image](https://user-images.githubusercontent.com/44738000/199138435-9bff8749-46bc-4ad5-b8d3-333c32134f5f.png)
+
+- PATCH localhost:8081/Pedido/{idItem}?idCart={idCart} - altera preco de item
+- Body { "unitPrice": "12.90"}
+![image](https://user-images.githubusercontent.com/44738000/199138595-0f6a03b6-9ce6-4a5d-bb07-65e1ebfbee12.png)
+
+
+
 
 
 
