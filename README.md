@@ -12,11 +12,16 @@
   - [Manualmente](#manualmente)
   - [Oracle com docker](#oracle-com-docker)
 - [Caminho de Funcionalidades](#caminho-de-funcionalidades)
-  - [Pricipais](#principais)
+  - [Principais](#principais)
   - [Cliente](#cliente)
   - [Carrinho](#carrinho)
   - [Produto](#produto)
   - [Item](#item)
+- [Rotina de testes](#rotina-de-testes)
+- [Introdução](#introdução)
+- [Classes](#classes)
+- [Rest](#rest)
+- [Factory](#factory)
   
 
 ## Intodução
@@ -80,7 +85,7 @@ spring.jpa.hibernate.ddl-auto = update
 5.rodar aplicação spring mvn spring-boot:run(certificar que não tem nenhum processo na porta 8081 ou 8082(onde roda o oracle))
 ## Caminho de Funcionalidades
 
-### Pricipais
+### Principais
 - POST localhost:8081/Produto - adiciona produto
 - Body
 { "description": "Revista" }
@@ -161,6 +166,48 @@ spring.jpa.hibernate.ddl-auto = update
 - PATCH localhost:8081/Pedido/{idItem}?idCart={idCart} - altera preco de item
 - Body { "unitPrice": "12.90"}
 ![image](https://user-images.githubusercontent.com/44738000/199138595-0f6a03b6-9ce6-4a5d-bb07-65e1ebfbee12.png)
+
+## Rotina de testes
+
+### Introdução
+Separei os testes em 3 partes o testes em classes que estão desempenhando funcionalidades básicas, o testes rest que se referem a funções do jpa que são de buscar no banco de dados, de salvar no banco de dados e etc e por último os testes mock que são testes que avaliam o status e o retorno dos endpoints.
+
+#### Classes 
+Os testes ficam nessa pasta: src\test\java\br\com\geofusion\testecarrinhocompras\classes
+-Testam as classes:
+- Client
+- Item
+- Product
+- ShoppingCart
+
+#### Rest
+Os testes ficam nessa pasta src\test\java\br\com\geofusion\testecarrinhocompras\Rest
+-Testam as classes:
+- ClientModel
+- ClientService
+- ClientDto
+- ClientRepository
+- ItemModel
+- ItemService
+- ItemDto
+- ItemRepository
+- ProductModel
+- ProductService
+- ProductDto
+- Product
+- ShoppingCartModel
+- ShoppingCartService
+- ShoppingCartDto
+- ShoppingCartRepository
+
+#### Factory
+Esses são os testes mock sao os testes que envolvem mais funcionalidades do sistema e são os testes mais complexos, eles normalmente funcionam sem a aplicação estar rodando mas pode pedir para a aplicação rodar.
+Os testes ficam nessa pasta src\test\java\br\com\geofusion\testecarrinhocompras\Factory.
+-Testam principalmente as classes:
+- ClientControllerFactory
+- ItemControllerFactory
+- ProductControllerFactory
+- ShoppingCartControllerFactory
 
 
 
