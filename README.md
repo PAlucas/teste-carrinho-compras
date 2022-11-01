@@ -27,6 +27,38 @@ Aplicação que visa simular o funcionamento de um carrinho de e-commerce, funci
 ### Dependencia de conexão com oracle
 - ojdbc8
 
+## Como iniciar o projeto
+
+### Manualmente 
+1. git clone https://github.com/PAlucas/teste-carrinho-compras.git
+2. baixar oracle https://drive.google.com/drive/folders/1ChH_0sXlkww9113xv5vT-HjCJVVSpzqT?usp=sharing
+(neste link tem o tutorial de instalação e o executável do oracle 11g)
+3. no arquivo application.properties(path:src\main\resources\application.properties)
+#spring.jpa.hibernate.ddl-auto = update | comentar essa linha
+spring.jpa.hibernate.ddl-auto=create | descomentar essa linha
+4. rodar aplicação spring mvn spring-boot:run(certificar que não tem nenhum processo na porta 8081 ou 1521(onde roda o oracle))
+
+### Oracle com docker
+
+Eu criei uma imagem com o banco de dados feito e com alguns registros, o que deixa mais fácil o teste da aplicação.
+1. git clone https://github.com/PAlucas/teste-carrinho-compras.git
+2. docker pull lucaslotti/bancodedados-carrinho:bd_carrinho
+3. docker run -d --name carrinho_bd -p 8082:1521 lucaslotti/bancodedados-carrinho:bd_carrinho
+4. no arquivo application.properties(path:src\main\resources\application.properties)
+server.port=8081
+
+spring.datasource.url= jdbc:oracle:thin:@//localhost:8082:1521/xe
+spring.datasource.username=SYSTEM   
+spring.datasource.password=oracle
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.database-platform=org.hibernate.dialect.Oracle12cDialect
+spring.jpa.hibernate.use-new-id-generator-mappings=false
+spring.jpa.properties.hibernate.format_sql = true
+spring.jpa.hibernate.ddl-auto = update
+#spring.jpa.hibernate.ddl-auto=create
+
+5.rodar aplicação spring mvn spring-boot:run(certificar que não tem nenhum processo na porta 8081 ou 8082(onde roda o oracle))
 ## Caminho de Funcionalidades
 
 ### Pricipais
